@@ -2,12 +2,11 @@
 
 import java.util.Arrays;
 
-
 public class MonsterTwo {
 	
 	static char[][] battleBoard = new char[10][10];
 	
-	public static void buildBattleBoard() {
+	public  static void buildBattleBoard() {
 		
 		for (char[] row : battleBoard) {
 			Arrays.fill(row, '*');
@@ -69,7 +68,7 @@ public class MonsterTwo {
 		return health;
 	}
 	
-	public boolean getAliv() {
+	public boolean getAlive() {
 		return alive;
 	}
 	
@@ -91,6 +90,90 @@ public class MonsterTwo {
 		}
 		
 	}
+	
+	public void moveMonster(MonsterTwo[] monster, int arrayItemIndex) 
+	{
+		boolean isSpaceOpen = true;
+		int maxXBoardSpace = battleBoard.length-1;
+		int maxYBoardSpace = battleBoard[0].length-1;
+		
+		while (isSpaceOpen)
+		{
+			int randMoveDirection = (int) (Math.random()*4);
+			int randMoveDistance = (int) (Math.random()*(this.getMovement()-1));
+			
+			System.out.println(randMoveDistance +  " " + randMoveDirection);
+			
+			battleBoard[this.yPosition][this.xPosition] = 'X';
+			
+			if(randMoveDirection == 0) {
+				if ((this.yPosition-randMoveDistance) < 0) {
+					this.yPosition = 0;
+				} else {
+					this.yPosition = this.yPosition-randMoveDistance;
+				}
+			} else if (randMoveDirection == 1) {
+				if ((this.xPosition+randMoveDistance) > maxXBoardSpace) {
+					this.xPosition = maxXBoardSpace;
+				} else {
+					this.xPosition = this.xPosition + randMoveDistance;
+				}
+			} else if (randMoveDirection == 2) {
+				if ((this.yPosition+randMoveDistance) > maxYBoardSpace) {
+					this.yPosition = maxYBoardSpace;
+				} else {
+					this.yPosition = this.yPosition + randMoveDistance;
+				}
+			} else {
+				if ((this.xPosition-randMoveDistance) < 0) {
+					this.xPosition = 0;
+				} else {
+					this.xPosition = this.xPosition - randMoveDistance;
+				}
+				
+			}
+			
+			for (int i=0; i<monster.length; i++) {
+				
+				
+				if (i == arrayItemIndex) 
+				{
+					continue;
+				}
+				
+				if (onMySpace(monster, i, arrayItemIndex))
+				{
+					
+					isSpaceOpen = true;
+					break;
+					
+				} else {
+					isSpaceOpen = false;
+				}
+				
+			}
+			
+		} // ENd of while loop
+		
+		battleBoard[this.yPosition][this.xPosition] = this.nameChar1;
+		
+	} // end of move monster
+	
+	public boolean onMySpace(MonsterTwo[] monster, int indexToCheck1, int indexToCheck2) {
+		
+		if ((monster[indexToCheck1].xPosition) == (monster[indexToCheck2].xPosition)) 
+			
+			if ((monster[indexToCheck1].yPosition) == (monster[indexToCheck2].yPosition)) {
+				
+				return true;
+			} 
+			
+		return false;
+		
+	} // end of onMySpace
+	
+	
+	
 	
 	public MonsterTwo(int health, int newAttack, int newMovement, String name) { //constructer
 		
